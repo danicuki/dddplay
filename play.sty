@@ -1,0 +1,107 @@
+\typeout{Document Style Option `play' by R. S. Rubinstein 1993, 1994.}
+\oddsidemargin 0.25in \evensidemargin 0.25in
+\marginparwidth 40pt \marginparsep 10pt
+\topmargin 0pt \headsep .75in
+\textheight 8.0in \textwidth 6.25in
+\parindent 0pt \parskip 0pt
+\brokenpenalty 10000
+\baselineskip 18pt
+\nofiles
+\pagestyle{headings}
+\newlength{\@charindent} \setlength{\@charindent}{0em}
+\newlength{\halfwidth} \setlength{\halfwidth}{0.5\textwidth}
+\newcounter{@act} \newcounter{@scene}
+\newbox\@castlist
+\setbox\@castlist=\hbox{}
+\newcommand{\cast}[2]{\setbox\@castlist=\vbox{\hbox{\box\@castlist}
+	\hbox{\makebox[1.5in][l]{#1} {\it #2}}}}
+
+\newcommand{\makechar}[2]{\newcommand{#1}{\par\vspace{1ex}\pagebreak[3]%
+	\hspace*{\halfwidth}{\small\sc #2}\rm\nopagebreak\\}}
+\newcommand{\remakechar}[2]{\renewcommand{#1}{\par\vspace{1ex}\pagebreak[3]%
+	\hspace*{\halfwidth}{\small\sc #2}\rm\nopagebreak\\}}
+\newcommand{\makeside}[2]{\newcommand{#1}{\par\vspace{1ex}\pagebreak[3]%
+	\hspace*{\halfwidth}{\bf #2}\bf\nopagebreak\\}}
+\newcommand{\remakeside}[2]{\renewcommand{#1}{\par\vspace{1ex}\pagebreak[3]%
+	\hspace*{\halfwidth}{\bf #2}\bf\nopagebreak\\}}
+
+\newcommand{\stagedir}[1]{\par\hspace*{\halfwidth}\parbox{\halfwidth}%
+	{[{\em #1}\/]}}
+\renewcommand{\author}[1]{\def\@author{#1}\authortrue}
+\renewcommand{\date}[1]{\def\@date{#1}\datetrue}
+\newcommand{\runtitle}[1]{\markright{\hspace*{-\@charindent}{#1}}}
+\renewcommand{\title}[1]{\def\@title{#1}\runtitle{\uppercase{#1}}}
+\newcommand{\addr}[1]{\def\@addr{#1}\addrtrue}
+\newcommand{\settingtime}[2]{\def\@set{#1}\def\@tim{#2}\settimtrue}
+
+\newcommand{\comment}[1]{[{\em #1}\/]}
+\newcommand{\act}{\stepcounter{@act}\setcounter{@scene}{0}%
+		\par\vspace*{1ex}\hspace*{\halfwidth}{\large ATO \Roman{@act}}}
+\newcommand{\scene}{\stepcounter{@scene}\par\vspace*{1ex}\hspace*{\halfwidth}%
+		{\em Cena \the@scene}\vspace*{1ex}}
+\newcommand{\publish}[1]{
+	\setlength{\@charindent}{#1}
+	\addtolength{\oddsidemargin}{\@charindent}
+	\addtolength{\evensidemargin}{\@charindent}
+	\addtolength{\textwidth}{-\@charindent}
+	\renewcommand{\makechar}[2]{\newcommand{##1}{\par\vspace*{1ex}%
+		\makebox[0pt][r]{\makebox[\@charindent][l]{\small\sc ##2:}}\rm}}
+	\renewcommand{\remakechar}[2]{\renewcommand{##1}{\par\vspace*{1ex}%
+		\makebox[0pt][r]{\makebox[\@charindent][l]{\small\sc ##2:}}\rm}}
+	\renewcommand{\makeside}[2]{\newcommand{##1}{\par\vspace*{1ex}%
+		\makebox[0pt][r]{\makebox[\@charindent][l]{\em ##2:}}\bf}}
+	\renewcommand{\remakeside}[2]{\newcommand{##1}{\par\vspace*{1ex}%
+		\makebox[0pt][r]{\makebox[\@charindent][l]{\em ##2:}}\bf}}
+	\renewcommand{\stagedir}[1]{\comment{##1}}
+	\renewcommand{\act}{\stepcounter{@act}\setcounter{@scene}{0}%
+		\smallskip\begin{center}%
+		\mbox{\large ACT \Roman{@act}\hspace*{\@charindent}}%
+		\end{center}}
+	\renewcommand{\scene}{\stepcounter{@scene}%
+		\smallskip\begin{center}%
+		\mbox{\em Cena \the@scene\hspace*{\@charindent}}%
+		\end{center}}
+	}
+
+\def\@title{PUT IN A TITLE, STUPID!}\runtitle{\@title} \def\@author{}
+\def\@submitdate{\ifcase\the\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space \number\the\year}
+\newif\ifdate \datefalse
+\newif\ifauthor \authorfalse
+\newif\ifaddr \addrfalse
+\newif\ifcpyrt \cpyrtfalse
+\newif\ifsettim \settimfalse
+
+\def\playstart{
+
+	\thispagestyle{empty}
+	\hspace*{-.5\@charindent}\parbox{\textwidth}{%
+	\begin{center}
+	\vspace*{1truein}
+	{\Large \@title}\\[1ex]
+	\ifauthor{by\\\@author\\}\fi
+	\end{center}}
+
+	\vfill
+	\hspace*{-\@charindent}\parbox{\textwidth}{%
+	\ifaddr{\@addr}\\\fi
+	\ifcpyrt{Copyright \copyright\ }\fi \ifdate{\@date}\fi
+	}
+
+	\newpage
+
+	\hspace*{-.5\@charindent}\parbox{\textwidth}{%
+	\begin{center}
+	\underbar{\sc Elenco}
+	\end{center}}
+
+	\hspace*{-\@charindent}\box\@castlist
+
+	\vfill
+	\ifsettim{\hspace*{-\@charindent}{\it Setting: \@set\\%
+		\hspace*{-\@charindent}Time: \@tim}}\fi
+
+	\newpage
+}
